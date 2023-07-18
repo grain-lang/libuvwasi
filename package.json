@@ -1,0 +1,76 @@
+{
+  "name": "@grain/libuvwasi",
+  "version": "0.0.0",
+  "description": "Libuvwasi packaged for OCaml.",
+  "author": "Blaine Bublitz <blaine@grain-lang.org>",
+  "license": "MIT",
+  "dependencies": {
+    "@opam/conf-cmake": "grain-lang/cmake:esy.json#1cead3871bbb27a45adab2263ef2dff4a38a8869",
+    "@opam/conf-libuv": "grain-lang/libuv:package.json#887e958c3856deb62431f9c55e8984c50df9a169"
+  },
+  "devDependencies": {},
+  "resolutions": {},
+  "esy": {
+    "build": [
+      [
+        "cmake",
+        "-S",
+        "uvwasi",
+        "-B",
+        "$cur__target_dir",
+        "-G",
+        "Unix Makefiles",
+        "-DCMAKE_INSTALL_PREFIX=$cur__install",
+        "-DUVWASI_BUILD_TESTS=OFF"
+      ],
+      [
+        "cmake",
+        "--build",
+        "$cur__target_dir"
+      ]
+    ],
+    "install": [
+      [
+        "cmake",
+        "--install",
+        "$cur__target_dir"
+      ]
+    ],
+    "buildEnv": {
+      "PATH": "#{os == 'windows' ? '/usr/x86_64-w64-mingw32/sys-root/mingw/bin' : '' : $PATH }",
+      "CC": "#{os == 'windows' ? 'x86_64-w64-mingw32-gcc' : ''}",
+      "CXX": "#{os == 'windows' ? 'x86_64-w64-mingw32-g++' : ''}"
+    },
+    "exportedEnv": {
+      "PATH": {
+        "val": "#{os == 'windows' ? '/usr/x86_64-w64-mingw32/sys-root/mingw/bin' : '' : $PATH }",
+        "scope": "global"
+      },
+      "CMAKE_PREFIX_PATH": {
+        "val": "#{self.install : $CMAKE_PREFIX_PATH}",
+        "scope": "global"
+      },
+      "LIBUVWASI_INCLUDE_PATH": {
+        "val": "#{self.install / 'include'}",
+        "scope": "global"
+      },
+      "LIBUVWASI_LIB_PATH": {
+        "val": "#{self.lib}",
+        "scope": "global"
+      }
+    }
+  },
+  "scripts": {},
+  "installConfig": {
+    "pnp": false
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "uvwasi",
+    "wasi",
+    "wasm",
+    "ocaml"
+  ]
+}
